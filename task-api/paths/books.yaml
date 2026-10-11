@@ -1,0 +1,92 @@
+books:
+  get:
+    tags: [Books]
+    summary: Lấy danh sách sách
+    operationId: listBooks
+    responses:
+      '200':
+        description: Lấy danh sách thành công.
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/BookList'
+            example:
+              data:
+                - id: 1
+                  title: Clean Code
+                  author: Robert C. Martin
+                  published_year: 2008
+              total: 1
+      '500':
+        $ref: '../components/responses.yaml#/InternalServerError'
+  post:
+    tags: [Books]
+    summary: Tạo sách mới
+    operationId: createBook
+    requestBody:
+      $ref: '../components/request-bodies.yaml#/BookCreate'
+    responses:
+      '201':
+        description: Tạo sách thành công.
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/Book'
+      '400':
+        $ref: '../components/responses.yaml#/BadRequest'
+      '415':
+        $ref: '../components/responses.yaml#/UnsupportedMediaType'
+      '500':
+        $ref: '../components/responses.yaml#/InternalServerError'
+
+book_by_id:
+  parameters:
+    - $ref: '../components/parameters.yaml#/BookId'
+  get:
+    tags: [Books]
+    summary: Lấy thông tin một cuốn sách
+    operationId: getBook
+    responses:
+      '200':
+        description: Tìm thấy sách.
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/Book'
+      '404':
+        $ref: '../components/responses.yaml#/NotFound'
+      '500':
+        $ref: '../components/responses.yaml#/InternalServerError'
+  put:
+    tags: [Books]
+    summary: Thay thế thông tin có thể chỉnh sửa của sách
+    description: PUT yêu cầu title, author và published_year.
+    operationId: updateBook
+    requestBody:
+      $ref: '../components/request-bodies.yaml#/BookUpdate'
+    responses:
+      '200':
+        description: Cập nhật thành công.
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/Book'
+      '400':
+        $ref: '../components/responses.yaml#/BadRequest'
+      '404':
+        $ref: '../components/responses.yaml#/NotFound'
+      '415':
+        $ref: '../components/responses.yaml#/UnsupportedMediaType'
+      '500':
+        $ref: '../components/responses.yaml#/InternalServerError'
+  delete:
+    tags: [Books]
+    summary: Xóa sách
+    operationId: deleteBook
+    responses:
+      '204':
+        description: Xóa thành công; response không có nội dung.
+      '404':
+        $ref: '../components/responses.yaml#/NotFound'
+      '500':
+        $ref: '../components/responses.yaml#/InternalServerError'
