@@ -31,6 +31,24 @@
 - Hỗ trợ xử lý lỗi chuẩn hóa và phản hồi JSON đồng nhất.
 - Có bộ kiểm thử tự động bằng `pytest` để xác thực hành vi API.
 
+## Swagger UI
+
+Sau khi chạy Flask, mở [Swagger UI](http://127.0.0.1:5000/docs) để xem tài liệu và thử gọi API. Đặc tả JSON được cung cấp tại [OpenAPI JSON](http://127.0.0.1:5000/openapi.json); Swagger UI bật sẵn **Try it out** và dùng host hiện tại của ứng dụng.
+
+Ảnh minh chứng Swagger UI với **Try it out**:
+**Books**
+![Swagger UI - Try it out](task-api/swagger-ui-1.png)
+**Authors**
+![Swagger UI - Try it out](task-api/swagger-ui-2.png)
+**Borrow**
+![Swagger UI - Try it out](task-api/swagger-ui-3.png)
+
+
+## Hai quyết định thiết kế khó nhất
+
+1. **Duy trì OpenAPI theo YAML module và bundle thành một contract dùng lúc chạy.** Tách paths, schemas, parameters và responses giúp nhóm sửa từng phần độc lập; Flask phục vụ bản bundle ở `/openapi.json` để Swagger UI và client dùng chung một đặc tả đã hợp nhất. Đổi lại, cần tạo lại `bundled-openapi.yaml` sau khi sửa các file nguồn.
+2. **Tách HTTP/validation khỏi nghiệp vụ, đồng thời để server cấp ID.** Routes xử lý giao thức và validation, còn services quản lý dữ liệu; cách này giữ logic nghiệp vụ dễ kiểm thử và có thể thay lớp lưu trữ sau này. ID do server cấp để tránh client tạo ID trùng; lựa chọn lưu trữ hiện tại là in-memory nên dữ liệu sẽ mất khi khởi động lại.
+
 ## Cấu trúc thư mục
 
 ```text
@@ -169,3 +187,4 @@ Dự án hiện đang lưu dữ liệu bằng bộ nhớ trong quá trình chạ
 ---
 
 > Đây là dự án mẫu trong môn Kiến trúc hướng dịch vụ, tập trung vào việc mô tả API, xử lý resource, và triển khai API theo chuẩn REST với OpenAPI.
+
